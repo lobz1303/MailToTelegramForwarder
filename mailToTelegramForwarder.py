@@ -279,7 +279,7 @@ class MailAttachment:
 class MailBody:
     text: str = ''
     html: str = ''
-    images: typing.Optional[dict[str, MailAttachment]] = None
+    images: typing.Optional[Dict[str, MailAttachment]] = None
     attachments: typing.Optional[List[MailAttachment]] = None
 
 
