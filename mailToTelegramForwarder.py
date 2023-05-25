@@ -316,7 +316,7 @@ class TelegramBot:
     def __init__(self, config: Config):
         self.config = config
 
-    def cleanup_html(self, message: str, images: typing.Optional[dict[str, MailAttachment]] = None) -> str:
+    def cleanup_html(self, message: str, images: typing.Optional[Dict[str, MailAttachment]] = None) -> str:
         """
         Parse HTML message and remove HTML elements not supported by Telegram
         """
