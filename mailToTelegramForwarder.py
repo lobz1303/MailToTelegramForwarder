@@ -32,6 +32,7 @@ try:
     import email
     from email.header import Header, decode_header, make_header
     from enum import Enum
+    from typing import List
 except ImportError as import_error:
     logging.critical(import_error.__class__.__name__ + ": " + import_error.args[0])
     sys.exit(2)
@@ -279,7 +280,7 @@ class MailBody:
     text: str = ''
     html: str = ''
     images: typing.Optional[dict[str, MailAttachment]] = None
-    attachments: typing.Optional[list[MailAttachment]] = None
+    attachments: typing.Optional[List[MailAttachment]] = None
 
 
 class MailDataType(Enum):
