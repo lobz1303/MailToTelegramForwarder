@@ -56,7 +56,7 @@ with warnings.catch_warnings(record=True) as w:
     # Cause all warnings to always be triggered.
     warnings.simplefilter("always")
 
-    from telegram import helpers
+    from telegram.utils import helpers
     import telegram
 
     # Ignore not supported warnings
