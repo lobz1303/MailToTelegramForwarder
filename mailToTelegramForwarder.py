@@ -451,7 +451,7 @@ class TelegramBot:
             tg_chat: telegram.Chat = bot.get_chat(self.config.tg_forward_to_chat_id)
 
             # get chat title
-            tg_chat_title = tg_chat.full_name
+            tg_chat_title = tg_chat.username
             if not tg_chat_title:
                 tg_chat_title = tg_chat.title
             if not tg_chat_title:
