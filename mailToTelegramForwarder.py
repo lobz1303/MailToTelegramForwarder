@@ -784,13 +784,11 @@ class Mail:
                         content = bot.cleanup_html(body.html, body.images)
 
                     elif body.text:
-                        content = telegram.utils.helpers.escape_markdown(text=content,
-                                                                         version=self.config.tg_markdown_version)
+                        content = telegram.utils.helpers.escape_markdown(text=content)
 
                 else:
                     if body.text:
-                        content = telegram.utils.helpers.escape_markdown(text=content,
-                                                                         version=self.config.tg_markdown_version)
+                        content = telegram.utils.helpers.escape_markdown(text=content)
 
                     elif body.html:
                         message_type = MailDataType.HTML
@@ -840,8 +838,7 @@ class Mail:
                     if message_type == MailDataType.HTML:
                         file_name = attachment.name
                     else:
-                        file_name = telegram.utils.helpers.escape_markdown(
-                            text=attachment.name, version=self.config.tg_markdown_version)
+                        file_name = telegram.utils.helpers.escape_markdown(text=attachment.name)
                     attachments_summary += "\n " + str(attachment.idx) + ": " + file_name
 
             # subject
@@ -859,12 +856,9 @@ class Mail:
                 mail_from = html.escape(mail_from, quote=True)
                 email_text = "<b>From:</b> " + mail_from + "\n<b>Subject:</b> "
             else:
-                subject = telegram.utils.helpers.escape_markdown(text=subject,
-                                                                 version=self.config.tg_markdown_version)
-                mail_from = telegram.utils.helpers.escape_markdown(text=mail_from,
-                                                                   version=self.config.tg_markdown_version)
-                summary_line = telegram.utils.helpers.escape_markdown(text=summary_line,
-                                                                      version=self.config.tg_markdown_version)
+                subject = telegram.utils.helpers.escape_markdown(text=subject)
+                mail_from = telegram.utils.helpers.escape_markdown(text=mail_from)
+                summary_line = telegram.utils.helpers.escape_markdown(text=summary_line)
                 email_text = "*From:* " + mail_from + "\n*Subject:* "
             email_text += subject + summary_line + content + " " + attachments_summary
 
