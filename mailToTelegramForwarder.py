@@ -32,8 +32,6 @@ try:
     import email
     from email.header import Header, decode_header, make_header
     from enum import Enum
-    from typing import List
-    from typing import Dict
 except ImportError as import_error:
     logging.critical(import_error.__class__.__name__ + ": " + import_error.args[0])
     sys.exit(2)
@@ -280,8 +278,8 @@ class MailAttachment:
 class MailBody:
     text: str = ''
     html: str = ''
-    images: typing.Optional[Dict[str, MailAttachment]] = None
-    attachments: typing.Optional[List[MailAttachment]] = None
+    images: typing.Optional[dict[str, MailAttachment]] = None
+    attachments: typing.Optional[list[MailAttachment]] = None
 
 
 class MailDataType(Enum):
@@ -317,7 +315,7 @@ class TelegramBot:
     def __init__(self, config: Config):
         self.config = config
 
-    def cleanup_html(self, message: str, images: typing.Optional[Dict[str, MailAttachment]] = None) -> str:
+    def cleanup_html(self, message: str, images: typing.Optional[dict[str, MailAttachment]] = None) -> str:
         """
         Parse HTML message and remove HTML elements not supported by Telegram
         """
@@ -451,7 +449,7 @@ class TelegramBot:
             tg_chat: telegram.Chat = bot.get_chat(self.config.tg_forward_to_chat_id)
 
             # get chat title
-            tg_chat_title = tg_chat.username
+            tg_chat_title = tg_chat.full_name
             if not tg_chat_title:
                 tg_chat_title = tg_chat.title
             if not tg_chat_title:
@@ -784,11 +782,13 @@ class Mail:
                         content = bot.cleanup_html(body.html, body.images)
 
                     elif body.text:
-                        content = telegram.utils.helpers.escape_markdown(text=content)
+                        content = telegram.utils.helpers.escape_markdown(text=content,
+                                                                         version=self.config.tg_markdown_version)
 
                 else:
                     if body.text:
-                        content = telegram.utils.helpers.escape_markdown(text=content)
+                        content = telegram.utils.helpers.escape_markdown(text=content,
+                                                                         version=self.config.tg_markdown_version)
 
                     elif body.html:
                         message_type = MailDataType.HTML
@@ -838,7 +838,8 @@ class Mail:
                     if message_type == MailDataType.HTML:
                         file_name = attachment.name
                     else:
-                        file_name = telegram.utils.helpers.escape_markdown(text=attachment.name)
+                        file_name = telegram.utils.helpers.escape_markdown(
+                            text=attachment.name, version=self.config.tg_markdown_version)
                     attachments_summary += "\n " + str(attachment.idx) + ": " + file_name
 
             # subject
@@ -856,9 +857,12 @@ class Mail:
                 mail_from = html.escape(mail_from, quote=True)
                 email_text = "<b>From:</b> " + mail_from + "\n<b>Subject:</b> "
             else:
-                subject = telegram.utils.helpers.escape_markdown(text=subject)
-                mail_from = telegram.utils.helpers.escape_markdown(text=mail_from)
-                summary_line = telegram.utils.helpers.escape_markdown(text=summary_line)
+                subject = telegram.utils.helpers.escape_markdown(text=subject,
+                                                                 version=self.config.tg_markdown_version)
+                mail_from = telegram.utils.helpers.escape_markdown(text=mail_from,
+                                                                   version=self.config.tg_markdown_version)
+                summary_line = telegram.utils.helpers.escape_markdown(text=summary_line,
+                                                                      version=self.config.tg_markdown_version)
                 email_text = "*From:* " + mail_from + "\n*Subject:* "
             email_text += subject + summary_line + content + " " + attachments_summary
 
